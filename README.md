@@ -29,7 +29,7 @@
     - [When the river widens: the paradox of choice](#when-the-river-widens-the-paradox-of-choice)
     - [Moral and design implications on building fair social systems](#moral-and-design-implications-on-building-fair-social-systems)
     - [Partial conclusion](#partial-conclusion)
-      - [Intuitions I'd like to give a chance (tips are welcome, guide me! :)](#intuitions-id-like-to-give-a-chance-tips-are-welcome-guide-me-)
+      - [super curious to try these intuitions, drop your tips and be my guide! :)](#super-curious-to-try-these-intuitions-drop-your-tips-and-be-my-guide-)
   - [Reproducibility \& improvements](#reproducibility--improvements)
   - [Limitations](#limitations)
   - [References](#references)
@@ -59,6 +59,8 @@ If you're curious about the experiment:
 
 **Requirements:** Python 3.12+, Numpy, Matplotlib, Scipy.
 
+After downloading or cloning this repository.
+
 1. Install dependencies:
 
     ```bash
@@ -78,16 +80,28 @@ If you're curious about the experiment:
     python segregation_sim.py --N 50 --k 7 --area 12
     ```
 
-- Example of larger run with influence visualization and longer simulation
+- Example of a larger run with enabled visualizations and larger simulation:
 
     ```bash
     python segregation_sim.py \
       --N 200 --k 7 --area 30.0 --steps 2000 \
-      --show-zones --zones-res 90 --zones-alpha 0.2 \
+      --raster-zones --zones-res 90 --zones-alpha 0.2 \
       --cluster-circles --cluster-dist 1.0 --cluster-alpha 0.12
     ```
 
-    See more about the available parameters below.
+- You can also use a headless mode (no visuals):
+
+    ```bash
+    python segregation_sim.py --N 200 --k 7 --cluster-circles --raster-zones --headless
+    ```
+
+   - Output displayed in terminal will display like this:
+
+    ```bash
+    Finished steps=95 | homophilic_agents=65 | clusters=2 | zones=4
+    ```
+
+    See more about the available [parameters](#parameters) below.
 
 ## What the visualization shows
 
@@ -139,10 +153,10 @@ Simulation ends when no agent is moving or when max steps is reached.
 | **max_steps** | Maximum number of iterations | 400 (default) |
 | **seed** | RNG seed for reproducibility | Integer (e.g., 1) |
 | **stop_when_silent** | Stop simulation early when no agents are moving | True / False |
-| **show_raster_zones** | Enable rasterized influence overlay (nearest-agent color field) | True / False |
+| **raster_zones** | Enable rasterized influence overlay (nearest-agent color field) | True / False |
 | **raster_zones_res** | Influence raster resolution (pixels per side) — lower → faster | 100–400 (default 150) |
 | **zones_alpha_scale** | Max alpha (opacity) for the overlay (0..1) | 0.0–1.0 (default 0.20) |
-| **show_cluster_circles** | Draw merged same-color cluster influence circles (independent of detail mode) | True / False |
+| **cluster_circles** | Draw merged same-color cluster influence circles (independent of detail mode) | True / False |
 | **cluster_dist** | Distance threshold for forming same‑color clusters (influence circles) | ~0.5–1.5 (default 1.0) |
 | **cluster_circle_alpha** | Alpha (opacity) for influence circles (0..1) | 0.0–0.5 (default 0.08–0.12) |
 | **detail_mode** | Toggle neighbor-line visualization and grid | True / False |
@@ -237,14 +251,14 @@ Since individuals may **unknowingly** be steered into segregation dynamics. Depl
 > [!WARNING]
 > The [Cambridge Analytica](https://en.wikipedia.org/wiki/Cambridge_Analytica) (2014-2018) scandal about behavioral-targeting applied to political campaigns. The firm’s opaque use of microtargeted psychographic data to influence voters produced emergent shifts in political behavior without user's awareness highlighting ethical concerns about steering populations via shady informational manipulations. A good [documentary](https://en.wikipedia.org/wiki/The_Great_Hack) about it and [a movie](https://en.wikipedia.org/wiki/Brexit:_The_Uncivil_War) based on these events.
 
-#### Intuitions I'd like to give a chance (tips are welcome, guide me! :)
+#### super curious to try these intuitions, drop your tips and be my guide! :)
 
 *Metaphors* ft. [pareidolia](https://en.wikipedia.org/wiki/Pareidolia).
 
 1) The *12th man* in action.
 
 ![banner image](img/mouton_noir.gif "Simulation showing agents with interesting domino effect.")
-<br>**The a-homophilic factor.** *A lonesome orange steppenwolf wandering into unchartered territory initiates a new dynamic among the oppposites. This domino kinda fascinates me.*
+<br>**The a-homophilic factor.** *A lone steppenwolf wandering into unchartered territory initiates a new dynamic among the oppposites. This domino kinda fascinates me.*
 
 1) Homophilic agents
 
