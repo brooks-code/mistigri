@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # =============================================================================
@@ -34,9 +33,9 @@ from typing import Any, Dict, Iterable, List, Optional
 import numpy as np
 from scipy.spatial import cKDTree
 
-# --- Helper: run a single experiment and collect per-step data ---
-
-
+# -------------------------
+# Helper: run a single experiment and collect per-step data
+# -------------------------
 def run_experiment_and_collect(
     experiment_id: int,
     N: int,
@@ -254,8 +253,9 @@ def run_experiment_and_collect(
 
     return rows
 
-
-# --- Parameter sweep utilities ---
+# -------------------------
+# Parameter sweep utilities
+# -------------------------
 def param_product(params: Dict[str, Iterable[Any]]) -> List[Dict[str, Any]]:
     """
     Produce the Cartesian product of sweep parameters.
@@ -275,8 +275,9 @@ def param_product(params: Dict[str, Iterable[Any]]) -> List[Dict[str, Any]]:
         combos.append({k: v for k, v in zip(keys, prod)})
     return combos
 
-
-# --- Main entrypoint for dataset generation ---
+# -------------------------
+# Main entrypoint for dataset generation
+# -------------------------
 def generate_dataset(
     out_csv: str,
     sweep_params: Dict[str, Iterable[Any]],
@@ -401,14 +402,15 @@ def generate_dataset(
 
                 # write rows
                 for r in rows:
-                    # ensure all fieldnames exist (fill missing with empty)
+                    # all fieldnames exist (fill missing with empty)
                     out_row = {fn: r.get(fn, "") for fn in fieldnames}
                     writer.writerow(out_row)
 
     print(f"Finished writing dataset to {out_csv}")
 
-
-# --- CLI ---
+# -------------------------
+# CLI
+# -------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Generate CSV dataset by sweeping simulation params.")
@@ -424,7 +426,7 @@ if __name__ == "__main__":
                         default=None, help="(unused) stop early")
     args = parser.parse_args()
 
-    # Example sweep: you can edit this block to specify the parameter grid to sweep.
+    # Example sweep
     sweep = {
         "N": [10, 22],
         "k": [3, 8],
