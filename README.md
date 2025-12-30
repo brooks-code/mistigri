@@ -17,12 +17,17 @@
 - [The Quiet that divides](#the-quiet-that-divides)
   - [Genesis](#genesis)
   - [Table of contents](#table-of-contents)
-  - [Experimental protocol (summary)](#experimental-protocol-summary)
+  - [Experimental protocol](#experimental-protocol)
   - [Setup](#setup)
   - [What the visualization shows](#what-the-visualization-shows)
     - [Available modes](#available-modes)
   - [Parameters](#parameters)
   - [Data collection suggestions](#data-collection-suggestions)
+  - [Dataset generator](#dataset-generator)
+    - [Example usage](#example-usage)
+    - [CSV sample](#csv-sample)
+    - [CSV columns](#csv-columns)
+    - [Notes](#notes)
   - [Philosophical insights](#philosophical-insights)
     - [What people see nearby extrapolates to segregation](#what-people-see-nearby-extrapolates-to-segregation)
     - [Engineered conformity](#engineered-conformity)
@@ -37,7 +42,7 @@
 
 </details>
 
-## Experimental protocol (summary)
+## Experimental protocol
 
 If you're curious about the experiment:
 
@@ -170,6 +175,93 @@ Simulation ends when no agent is moving or when max steps is reached.
     - small k → many small subgroups.
     - around k ≈ 7 → robust separation into two large zones.
     - beyond that → little change.
+
+## Dataset generator
+
+The mistigri project contains a small utility that run headless sweeps of the simulation. It writes per-step, per-agent results to CSV.
+
+- Runs the simulation (via functions in `segregation_sim.py`) for combinations of parameters.
+- Collects per-step agent state and computed descriptors:
+  - position (x,y), color, moving flag, homophilic flag
+  - neighbor links, cluster id and members, cluster radius (if available)
+  - influence zone id and zone members
+  - experiment metadata (N, k, frac_orange, area, seed, step_size, etc.)
+- Writes all rows to a single CSV.
+
+### Example usage
+
+From command line:
+
+```bash
+python dataset_generator.py --out dataset.csv --seeds 1 2 3 --raster-res 150 --cluster-dist 1.0
+```
+
+Programmatic usage:
+
+```python
+sweep = {
+  "N": [10, 22],
+  "k": [3, 8],
+  "frac_orange": [0.25, 0.5, 0.75],
+  "area_x": [1, 2, 3],
+  "max_steps": [100],
+  "step_size": [0.25],
+  "random_turn_sd": [0.7],
+}
+
+generate_dataset(
+  out_csv="dataset.csv",
+  sweep_params=sweep,
+  seeds=[1,2],
+  raster_zones_res=150,
+  zones_alpha_scale=0.2,
+  cluster_dist=1.0,
+)
+```
+
+### CSV sample
+
+```csv
+experiment_id,step,experiment_length,N,k,frac_orange,area_x,area_y,max_steps,step_size,random_turn_sd,seed,dot_id,x,y,color,is_moving,is_homophilic,links,cluster_id,cluster_members,cluster_radius,zone_id,zone_members
+1,1,100,10,3,0.25,1.0,1.0,100,0.25,0.7,1,0,0.3879107411620074,0.66974603680348,0,False,False,"[2, 3, 4, 5, 8]",0,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",1.4743106082090007,1,"[0, 1, 2, 3, 5, 7, 8, 9]"
+```
+
+### CSV columns
+
+| Column | Type | Notes |
+|---|---:|---|
+| experiment_id | integer | Unique experiment identifier |
+| step | integer | Timestep index (1-based) |
+| experiment_length | integer | Number of steps executed for the experiment |
+| N | integer | Number of agents |
+| k | integer | Number of nearest neighbors used for sensing/links |
+| frac_orange | float | Fraction of agents assigned the "orange" color (0.0–1.0) |
+| area_x | float | Width of simulation area |
+| area_y | float | Height of simulation area |
+| max_steps | integer | Maximum steps allowed for the run |
+| step_size | float | Distance agents move per step |
+| random_turn_sd | float | Standard deviation of random heading changes |
+| seed | integer | RNG seed used |
+| dot_id | integer | Agent id (0-based) |
+| x | float | Agent x-coordinate |
+| y | float | Agent y-coordinate |
+| color | string | Agent color label |
+| is_moving | boolean | Whether agent moved this step |
+| is_homophilic | boolean | True if agent's neighbors are all same color |
+| links | string (JSON list of ints) | JSON-encoded list of neighbor agent ids |
+| cluster_id | integer | Cluster root id (or -1 if none) |
+| cluster_members | string (JSON list of ints) | JSON-encoded list of member agent ids for the cluster |
+| cluster_radius | float or null | Radius of merged cluster circle if available, else null |
+| zone_id | integer or null | Influence-zone label id containing the agent, else null |
+| zone_members | string (JSON list of ints) | JSON-encoded list of agent ids owning that zone |
+
+### Notes
+
+- If area_y is omitted, **a square area** is used (area_y defaults to area_x).
+- The script normalizes sweep values to iterables; scalar values are accepted: as single scalars (e.g., 10) or as collections (e.g., [10, 20] or range(1,4))
+- Seeds control RNG determinism. Use multiple seeds to increase sample diversity.
+- Long sweeps can produce large CSVs; consider restricting combinations or filtering fields before saving if storage/performance is a concern.
+- The experiment stops early for an experiment when all agents become silent (no beeps/moving).
 
 ## Philosophical insights
 
