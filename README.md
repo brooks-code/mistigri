@@ -340,10 +340,12 @@ If News Feed boosts posts that get early likes from your close friends, you’ll
 
 Since individuals may **unknowingly** be steered into segregation dynamics. Deployment of systems that alter information flows should include explainability and informed consent by design. Robust options for reverting and mitigating unwanted social effects on global scale are *sine qua none* conditions for their subsistence.
 
-> [!WARNING]
+> [!NOTE]
 > The [Cambridge Analytica](https://en.wikipedia.org/wiki/Cambridge_Analytica) (2014-2018) scandal about behavioral-targeting applied to political campaigns. The firm’s opaque use of microtargeted psychographic data to influence voters produced emergent shifts in political behavior without user's awareness highlighting ethical concerns about steering populations via shady informational manipulations. A good [documentary](https://en.wikipedia.org/wiki/The_Great_Hack) about it and [a movie](https://en.wikipedia.org/wiki/Brexit:_The_Uncivil_War) based on these events.
 
-#### super curious to try these intuitions, drop your tips and be my guide! :)
+---
+
+#### I'm super curious to try these intuitions, drop your tips and be my guide! :)
 
 *Metaphors* ft. [pareidolia](https://en.wikipedia.org/wiki/Pareidolia).
 
